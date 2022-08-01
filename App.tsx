@@ -21,15 +21,17 @@ const App: React.FC = () => {
     if (storage !== null) {
       if (storage === 'dark') {
         const result = await changeIcon('light');
-        if (result) {
+
+        if (typeof result === 'boolean' && result) {
           await AsyncStorage.setItem('icon', 'light');
         }
+
         return;
       }
     }
 
     const result = await changeIcon('dark');
-    if (result) {
+    if (typeof result === 'boolean' && result) {
       await AsyncStorage.setItem('icon', 'dark');
     }
   }, []);
