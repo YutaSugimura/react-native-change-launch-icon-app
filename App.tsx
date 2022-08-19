@@ -10,30 +10,20 @@
 
 import React, {useCallback} from 'react';
 import {Button, SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {changeIcon} from 'react-native-change-icon';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {changeIcon, getIcon} from 'react-native-change-icon';
 
 const App: React.FC = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const onChangeTheme = useCallback(async () => {
-    const storage = await AsyncStorage.getItem('icon');
-    if (storage !== null) {
-      if (storage === 'dark') {
-        const result = await changeIcon('light');
+    const currentlyIcon = await getIcon();
 
-        if (typeof result === 'boolean' && result) {
-          await AsyncStorage.setItem('icon', 'light');
-        }
-
-        return;
-      }
+    if (currentlyIcon === 'dark') {
+      changeIcon('light');
+      return;
     }
 
-    const result = await changeIcon('dark');
-    if (typeof result === 'boolean' && result) {
-      await AsyncStorage.setItem('icon', 'dark');
-    }
+    changeIcon('dark');
   }, []);
 
   return (
